@@ -16,20 +16,13 @@ class App extends Component {
 
   componentDidMount() {
     // Kubernetes nginx service endpoint
-    let counterServiceApiEndpoint = "http://localhost:30500"
     let personServiceApiEndpoint = "http://localhost:30500"
     console.log(window.location.hostname)
     console.log(window.location.port)
     if (window.location.hostname === 'localhost' && window.location.port === '8000') {
       // Docker-compose nginx service endpoint
-      counterServiceApiEndpoint = "http://localhost:8000"
       personServiceApiEndpoint = "http://localhost:8000"
     }
-    axios.get(`${counterServiceApiEndpoint}/count`)
-      .then(res => {
-        const counts = res.data.counts;
-        this.setState({ counts });
-      })
     axios.get(`${personServiceApiEndpoint}/persons`)
       .then(res => {
         const persons = res.data;
@@ -44,7 +37,6 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1>Sev1Tech Code Challenge</h1>
 
-          <h2>Counter service hit count: { this.state.counts }</h2>
           <h3>Person Service Persons</h3>
           <ul>
             { this.state.persons.map(person => <li key={person.firstName}>{person.firstName} {person.lastName}</li>)}
