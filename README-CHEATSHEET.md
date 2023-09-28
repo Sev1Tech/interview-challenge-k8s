@@ -1,4 +1,4 @@
-# Geocent DevOps Code Challenge Cheatsheet
+# Sev1Tech DevOps Code Challenge Cheatsheet
 
 ## Pre-Requisites
 - `docker-for-mac` or `docker-for-windows`
