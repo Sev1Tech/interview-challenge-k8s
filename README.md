@@ -36,3 +36,9 @@ Web Browser Client -->  webapp --> person-service --> postgres
 - Use `kubernetes`
 	- You may use `Docker for Mac` Kubernetes, `Docker for Windows` Kubernetes, or `minikube`
 	- For deployment tools, you may use `vanilla Kubernetes yaml`, `Helm`, `Kustomize`, or any other tool/scripting that you are comfortable with.
+
+
+## Steps
+- build the docker images. Ensure they run
+- standup a Kubernetes cluster: use K3d or Minikube
+- deploy the solution to Kubernetes

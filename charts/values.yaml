@@ -1,0 +1,48 @@
+webapp:
+  name: "webapp"
+  image: webapp
+  imageTag: latest
+  env:
+  port: 80
+  readinessProbe:
+    path: /
+    initialDelaySeconds: 3
+    timeoutSeconds: 3
+  livenessProbe:
+    path: /
+    initialDelaySeconds: 30
+    timeoutSeconds: 3
+  resources:
+    memory:
+      request: 256Mi
+      limit: 512Mi
+
+personService:
+  name: "person-service"
+  image: person-service
+  imageTag: latest
+  env:
+  port: 8080
+  readinessProbe:
+    path: /actuator/health
+    initialDelaySeconds: 3
+    timeoutSeconds: 3
+  livenessProbe:
+    path: /actuator/health
+    initialDelaySeconds: 30
+    timeoutSeconds: 3
+  resources:
+    memory:
+      request: 256Mi
+      limit: 512Mi
+  database:
+    host: postgres
+    port: 5432
+    name: postgres
+    secretName: postgres-secret
+
+postgresql:
+  auth:
+    username: postgres
+    password: postgres
+    database: postgres

@@ -1,0 +1,114 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.webapp.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.webapp.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.webapp.name  }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: {{ .Values.webapp.name }}
+      labels:
+        app: {{ .Values.webapp.name }}
+      annotations:
+    spec:
+      containers:
+      - name: app
+        image: {{ .Values.webapp.image }}:{{ .Values.webapp.imageTag }}
+        imagePullPolicy: Always
+        env:
+{{- if .Values.webapp.env }}
+{{ toYaml .Values.webapp.env | indent 8 }}
+{{- end }}
+        ports:
+        - containerPort: {{ .Values.webapp.port }}
+        readinessProbe:
+          timeoutSeconds: {{ .Values.webapp.readinessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.webapp.readinessProbe.initialDelaySeconds }}
+          httpGet:
+            path: {{ .Values.webapp.readinessProbe.path }}
+            port: {{ .Values.webapp.port }}
+        livenessProbe:
+          timeoutSeconds: {{ .Values.webapp.livenessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.webapp.livenessProbe.initialDelaySeconds }}
+          httpGet:
+            path: {{ .Values.webapp.livenessProbe.path }}
+            port: {{ .Values.webapp.port }}
+        resources:
+          limits:
+            memory: {{ .Values.webapp.resources.memory.limit }}
+          requests:
+            memory: {{ .Values.webapp.resources.memory.limit }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.personService.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.personService.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.personService.name  }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      name: {{ .Values.personService.name }}
+      labels:
+        app: {{ .Values.personService.name }}
+      annotations:
+    spec:
+      containers:
+      - name: app
+        image: {{ .Values.personService.image }}:{{ .Values.personService.imageTag }}
+        imagePullPolicy: Always
+        env:
+        - name: POSTGRES_HOST
+          value: {{ .Values.personService.database.host }}
+        - name: POSTGRES_PORT
+          value: {{ .Values.personService.database.port | quote }}
+        - name: POSTGRES_DB
+          value: {{ .Values.personService.database.name }}
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.personService.database.secretName }}
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.personService.database.secretName }}
+              key: password
+{{- if .Values.personService.env }}
+{{ toYaml .Values.personService.env | indent 8 }}
+{{- end }}
+        ports:
+        - containerPort: {{ .Values.personService.port }}
+        readinessProbe:
+          timeoutSeconds: {{ .Values.personService.readinessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.personService.readinessProbe.initialDelaySeconds }}
+          httpGet:
+            path: {{ .Values.personService.readinessProbe.path }}
+            port: {{ .Values.personService.port }}
+        livenessProbe:
+          timeoutSeconds: {{ .Values.personService.livenessProbe.timeoutSeconds }}
+          initialDelaySeconds: {{ .Values.personService.livenessProbe.initialDelaySeconds }}
+          httpGet:
+            path: {{ .Values.personService.livenessProbe.path }}
+            port: {{ .Values.personService.port }}
+        resources:
+          limits:
+            memory: {{ .Values.personService.resources.memory.limit }}
+          requests:
+            memory: {{ .Values.personService.resources.memory.limit }}
