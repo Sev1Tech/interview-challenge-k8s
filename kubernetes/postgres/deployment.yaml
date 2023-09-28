@@ -1,0 +1,23 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: deployment
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      containers:
+      - image: library/postgres:11
+        imagePullPolicy: Always
+        name: postgres
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: core-configmap
+        - secretRef:
+            name: core-secrets
+      restartPolicy: Always

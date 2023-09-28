@@ -1,0 +1,78 @@
+apiVersion: skaffold/v1beta11
+kind: Config
+
+profiles:
+  - name: redis
+    deploy:
+      kustomize:
+        path: kubernetes/redis
+
+  - name: postgres
+    deploy:
+      kustomize:
+        path: kubernetes/postgres
+
+  - name: nginx
+    deploy:
+      kustomize:
+        path: kubernetes/nginx
+
+  - name: counter
+    build:
+      tagPolicy:
+        gitCommit: {}
+      artifacts:
+      - image: geocent-code-challenge/counter-service
+        context: ./counter-service
+        docker:
+          dockerfile: Dockerfile
+      local:
+        push: false
+    deploy:
+      kustomize:
+        path: kubernetes/counter
+
+  - name: person
+    build:
+      tagPolicy:
+        gitCommit: {}
+      artifacts:
+      - image: geocent-code-challenge/person-service
+        context: ./person-service
+        docker:
+          dockerfile: Dockerfile
+      local:
+        push: false
+    deploy:
+      kustomize:
+        path: kubernetes/person
+
+  - name: webapp
+    build:
+      tagPolicy:
+        gitCommit: {}
+      artifacts:
+      - image: geocent-code-challenge/webapp
+        context: ./webapp
+        docker:
+          dockerfile: Dockerfile
+      local:
+        push: false
+    deploy:
+      kustomize:
+        path: kubernetes/webapp
+
+  - name: nginx
+    build:
+      tagPolicy:
+        gitCommit: {}
+      artifacts:
+      - image: geocent-code-challenge/nginx
+        context: ./nginx
+        docker:
+          dockerfile: Dockerfile
+      local:
+        push: false
+    deploy:
+      kustomize:
+        path: kubernetes/nginx
