@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './geocent.png';
+import logo from './sev1tech-logo.png';
 import './App.css';
 import axios from 'axios';
 
@@ -42,7 +42,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1>Geocent Code Challenge</h1>
+          <h1>Sev1Tech Code Challenge</h1>
 
           <h2>Counter service hit count: { this.state.counts }</h2>
           <h3>Person Service Persons</h3>

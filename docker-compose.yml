@@ -1,10 +1,5 @@
 version: '3'
 
-# Before running for the first time, to have global caching
-# docker volume create --name=global_pypi_cache
-# docker volume create --name=global_npm_cache
-# docker volume create --name=global_gradle_cache
-
 services:
 
   postgres:
@@ -12,53 +7,25 @@ services:
     env_file:
       - .env-dev
 
-  redis:
-    image: redis:alpine
-    env_file:
-      - .env-dev
-
-  counter-service:
-    image: python:3.7
-    command: bash /usr/src/app/run.sh
-    working_dir: /usr/src/app
-    env_file:
-      - .env-dev
-    volumes:
-      - ./counter-service:/usr/src/app
-      - global_pypi_cache:/root/.cache/pip
-
   person-service:
-    image: gradle:5.4-jdk11
-    command: bash /app/run.sh
-    working_dir: /app
+    build:
+      dockerfile: Dockerfile
+      context: ./person-service
+    depends_on:
+      - postgres
     env_file:
       - .env-dev
+    ports:
+      - 8080:8080
     volumes:
-      - ./person-service:/app
-      - global_gradle_cache:/home/gradle/.gradle
+      - ./cache:/home/gradle/.gradle
 
   webapp:
-    image: node:12-alpine
-    command: npm start
-    volumes:
-      - ./webapp:/app
-      - node_modules_cache:/app/node_modules
-      - global_npm_cache:/root/.npm
-    working_dir: /app
-
-  nginx:
-    image: nginx:alpine
+    build:
+      dockerfile: Dockerfile
+      context: ./webapp
     ports:
       - 8000:80
-    volumes:
-      - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - person-service
 
-volumes:
-  node_modules_cache:
-  jenkins_home:
-  global_npm_cache:
-    external: true
-  global_pypi_cache:
-    external: true
-  global_gradle_cache:
-    external: true
