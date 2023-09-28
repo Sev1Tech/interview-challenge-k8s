@@ -1,5 +1,6 @@
 node_modules/
 cache/*
+chart/charts/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

@@ -1,6 +1,6 @@
 webapp:
   name: "webapp"
-  image: webapp
+  image: sev1tech/webapp
   imageTag: latest
   env:
   port: 80
@@ -19,16 +19,16 @@ webapp:
 
 personService:
   name: "person-service"
-  image: person-service
+  image: sev1tech/person-service
   imageTag: latest
   env:
   port: 8080
   readinessProbe:
-    path: /actuator/health
-    initialDelaySeconds: 3
+    path: /persons
+    initialDelaySeconds: 30
     timeoutSeconds: 3
   livenessProbe:
-    path: /actuator/health
+    path: /persons
     initialDelaySeconds: 30
     timeoutSeconds: 3
   resources:
@@ -42,7 +42,9 @@ personService:
     secretName: postgres-secret
 
 postgresql:
+  fullnameOverride: postgres
   auth:
-    username: postgres
-    password: postgres
-    database: postgres
+    username: sev1_user
+    password: interview@2023
+    database: sev1_chlg
+    postgresPassword: postgres

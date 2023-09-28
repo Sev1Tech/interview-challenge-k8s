@@ -23,7 +23,7 @@ spec:
       containers:
       - name: app
         image: {{ .Values.webapp.image }}:{{ .Values.webapp.imageTag }}
-        imagePullPolicy: Always
+        imagePullPolicy: Never
         env:
 {{- if .Values.webapp.env }}
 {{ toYaml .Values.webapp.env | indent 8 }}
@@ -72,7 +72,7 @@ spec:
       containers:
       - name: app
         image: {{ .Values.personService.image }}:{{ .Values.personService.imageTag }}
-        imagePullPolicy: Always
+        imagePullPolicy: Never
         env:
         - name: POSTGRES_HOST
           value: {{ .Values.personService.database.host }}
@@ -80,7 +80,7 @@ spec:
           value: {{ .Values.personService.database.port | quote }}
         - name: POSTGRES_DB
           value: {{ .Values.personService.database.name }}
-        - name: POSTGRES_USERNAME
+        - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:
               name: {{ .Values.personService.database.secretName }}
