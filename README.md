@@ -11,8 +11,11 @@ In addition, the team would like to use Kubernetes to deploy these services in c
 ![Ideal Scenario image](./ideal-scenario.png)
 
 ## Pre-Requisites
-- `docker-for-mac` or `docker-for-windows`
-	- Includes `docker`, `docker-compose`, `kubectl`, and `kubernetes`
+- `docker`, `docker-compose`,
+- `kubectl`
+- `k3d` https://k3d.io/
+- `helm`
+- `git` and `github` account
 
 ## Provided Architecture
 <pre>																			  
@@ -30,15 +33,10 @@ Web Browser Client -->  webapp --> person-service --> postgres
 	- Base Docker hub image tags: `node:12-alpine` and `nginx:1.14.2` (Use multi-stage Dockerfiles)
 	- Exposed port: `8000` and/or `80`
 
-## Requirements
-- Use `docker` - `Dockerfiles`
-- Use `docker-compose` stack(s) unless a suitable alternative is provided
-- Use `kubernetes`
-	- You may use `Docker for Mac` Kubernetes, `Docker for Windows` Kubernetes, or `minikube`
-	- For deployment tools, you may use `vanilla Kubernetes yaml`, `Helm`, `Kustomize`, or any other tool/scripting that you are comfortable with.
-
-
 ## Steps
 - build the docker images. Ensure they run
-- standup a Kubernetes cluster: use K3d or Minikube
-- deploy the solution to Kubernetes
+- standup a Kubernetes cluster using `k3d`
+```
+k3d cluster create mycluster
+```
+- deploy the solution to Kubernetes using `helm`
