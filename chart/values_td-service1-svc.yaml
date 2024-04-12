@@ -1,7 +1,0 @@
-database:
-  enabled: true
-  type: postgres
-  postgres:
-    secret: service1-svc-postgres
-spring:
-  enabled: true
