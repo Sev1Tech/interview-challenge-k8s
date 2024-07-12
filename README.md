@@ -37,6 +37,6 @@ Web Browser Client -->  webapp --> person-service --> postgres
 - build the docker images. Ensure they run
 - standup a Kubernetes cluster using `k3d`
 ```
-k3d cluster create mycluster
+k3d cluster create
 ```
 - deploy the solution to Kubernetes using `helm`
