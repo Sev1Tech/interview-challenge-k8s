@@ -1,4 +1,4 @@
-FROM gradle:5.4-jdk11 as build
+FROM gradle:6.9-jdk11 as build
 
 USER root
 WORKDIR /app
